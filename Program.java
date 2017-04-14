@@ -8,9 +8,14 @@ public class Program {
                 new BufferedReader(new InputStreamReader(System.in)))
             {
                 Parser parser = new Parser(new Lexer(reader.readLine()));
-                Object symbolicExpression = parser.parse();
-                String result = interpreter.evaluate(symbolicExpression).toString();
-                System.out.println(result);
+
+                try {
+                    Object symbolicExpression = parser.parse();
+                    Object result = interpreter.evaluate(symbolicExpression);
+                    System.out.println(result.toString());
+                } catch (ParserException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }

@@ -1,5 +1,4 @@
 
-public interface IExpression
-{
+public interface IExpression {
     public Object evaluate(ContextEnvironment environment);
 }

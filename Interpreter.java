@@ -4,11 +4,11 @@ public class Interpreter {
 
     public Interpreter() {
         this.environment = new ContextEnvironment();
-        initialise(this.environment);
+        this.initialise(this.environment);
     }
 
     public Object evaluate(Object value) {
-        return evaluate(value, this.environment);
+        return this.evaluate(value, this.environment);
     }
 
     public static Object evaluate(Object value, ContextEnvironment environment) {
@@ -20,11 +20,6 @@ public class Interpreter {
     }
 
     public void initialise(ContextEnvironment environment) {
-        /*
-        environment.define("define", new PrimitiveDefine());
-        environment.define("+", new PrimitivePlus());
-        environment.define("-", new PrimitiveDifference());
-        environment.define("lambda", new PrimitiveLambda());
-        */
+        environment.define("+", new AdditionOperator());
     }
 }

@@ -6,25 +6,11 @@ public class Parser {
         this.lexer = lexer;
     }
 
-    /*
-    public ExpressionList parseExpressionList() {
-        Token token = this.lexer.Peek();
-        ExpressionList list = new ExpressionList();
-        while (token.Type != TokenType.RightParenthese) {
-            list.add(Terminal());
-            token = this.lexer.Peek();
-        }
-
-        this.lexer.Next();
-        return list;
-    }
-    */
-
     public Pair parseExpressionList() throws ParserException {
         Token token = this.lexer.Peek();
         if (token.Type == TokenType.RightParenthese) return null;
 
-        return new Pair(parseTerminal(), parseExpressionList());
+        return new Pair(this.parseTerminal(), this.parseExpressionList());
     }
 
     public Object parseTerminal() throws ParserException {
@@ -36,7 +22,7 @@ public class Parser {
             case Name:
                 return new Identifier((String) token.Value);
             case LeftParenthese:
-                return parseExpressionList();
+                return this.parseExpressionList();
             default: 
                 throw new ParserException("Unexcepted token '"
                         + token.Value + "'");
@@ -44,7 +30,7 @@ public class Parser {
     }
 
     public Object parse() throws ParserException {
-        return parseTerminal();
+        return this.parseTerminal();
     }
 }
 
