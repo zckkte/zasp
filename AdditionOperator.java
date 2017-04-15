@@ -1,6 +1,7 @@
 
 public class AdditionOperator extends ListFunction {
 
+    //TODO: make generic
     @Override
     public Object execute(Pair arguments, ContextEnvironment environment) {
         double result = 0.0;

@@ -1,23 +1,34 @@
-import java.util.*;
+import java.io.*;
 
 public class Lexer {
-    public String input;
-    public List<Token> tokens;
-    public static final int FIRST = 0;
+    private StreamTokenizer streamTokenizer;
 
     public Lexer(String input) {
-        this.input = input;
+        this(new BufferedReader(new StringReader(input)));
     }
 
-    public Lexer(List<Token> tokens) {
-        this.tokens = tokens;
+    public Lexer(BufferedReader bufferedReader) {
+        this.streamTokenizer = new StreamTokenizer(bufferedReader);
+        this.streamTokenizer.resetSyntax();
+        this.streamTokenizer.parseNumbers();
+        this.streamTokenizer.whitespaceChars(0, TokenType.Whitespace);
+        this.streamTokenizer.wordChars(TokenType.Whitespace + 1,255);
+        this.streamTokenizer.ordinaryChar(TokenType.LeftParenthesis);
+        this.streamTokenizer.ordinaryChar(TokenType.RightParenthesis);
+        this.streamTokenizer.quoteChar(TokenType.String);
     }
 
-    public Token Next() {
-        return this.tokens.remove(FIRST);
+    public Token next() throws IOException {
+        this.streamTokenizer.nextToken();
+        return new Token(this.streamTokenizer);
     }
 
-    public Token Peek() {
-        return this.tokens.get(FIRST);
+    public Token peek() throws IOException {
+        this.streamTokenizer.nextToken();
+        if (this.streamTokenizer.ttype == StreamTokenizer.TT_EOF) return null;
+
+        Token token = new Token(this.streamTokenizer);
+        this.streamTokenizer.pushBack();
+        return token;
     }
 }

@@ -1,3 +1,4 @@
+import java.io.IOException;
 
 public class Parser {
     private Lexer lexer;
@@ -6,30 +7,24 @@ public class Parser {
         this.lexer = lexer;
     }
 
-    public Pair parseExpressionList() throws ParserException {
-        Token token = this.lexer.Peek();
-        if (token.Type == TokenType.RightParenthese) return null;
+    public Pair parseExpressionList() throws ParserException, IOException {
+        if (this.lexer.peek().type == TokenType.RightParenthesis) return null;
 
         return new Pair(this.parseTerminal(), this.parseExpressionList());
     }
 
-    public Object parseTerminal() throws ParserException {
-        Token token = this.lexer.Next();
-        switch (token.Type) {
-            case Number:
-            case String:
-                return token.Value;
-            case Name:
-                return new Identifier((String) token.Value);
-            case LeftParenthese:
-                return this.parseExpressionList();
-            default: 
-                throw new ParserException("Unexcepted token '"
-                        + token.Value + "'");
+    public Object parseTerminal() throws ParserException, IOException {
+        Token token = this.lexer.next();
+        switch (token.type) {
+            case TokenType.Number:
+            case TokenType.String: return token.value;
+            case TokenType.Name: return new Identifier((String) token.value);
+            case TokenType.LeftParenthesis: return this.parseExpressionList();
+            default: throw new ParserException("Unexcepted token '" + token.value + "'");
         }
     }
 
-    public Object parse() throws ParserException {
+    public Object parse() throws ParserException, IOException {
         return this.parseTerminal();
     }
 }
