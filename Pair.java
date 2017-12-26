@@ -17,11 +17,8 @@ public class Pair implements IExpression {
     }
 
     public Object evaluate(ContextEnvironment environment) {
-        IFunction function = (IFunction) Interpreter.evaluate(this.first,
-                environment);
-        if (function == null) {
-            throw new UnsupportedOperationException();
-        }
+        IFunction function = (IFunction) Interpreter.evaluate(this.first, environment);
+        if (function == null) throw new UnsupportedOperationException();
 
         return function.apply((Pair) this.rest, environment);
     }
